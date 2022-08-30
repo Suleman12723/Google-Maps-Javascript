@@ -1,70 +1,77 @@
-# Getting Started with Create React App
+# Google Maps Javascript
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### To Run project
 
-## Available Scripts
+- Open project folder in a Terminal and run the following command
+```bash
+npm start
+```
 
-In the project directory, you can run:
+### Tasks
 
-### `npm start`
+- This Project is a follow up  of a tutorial.
+- You search some location google maps so a marker is set on that location.
+- 3 Circles are drawn around it with diffrent radius.
+- Each circle is colured based on radius as to near, far and too far.
+- Other markers are randomly generated around the  by a function named generatehouses.
+- By Clicking on marker can see the path towards the marker here (named office).
+- Also showing distance from the clicked marker to the office marker.
+- and some other tasks are also being done.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Environment Variables
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+To run this peoject you have to put your Google API key in ```App.js``` file
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`googleMapsApiKey` = Google API_KEY
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Some important Functions
+- Function returns given amount of houses (markers) around the office marker
+- It takes an argumnet `position` that is the position (coordinates {lat,lng}) of the office marker or could be anything around which you want to generate markers.
+- **Could be used to generate markers of cars or some other things by taking cars coords from DB and passing the array of coords to this function by modifing it a little bit.**
+```js 
+const generateHouses = (position)=>{ /
+    const houses = [];  
+    for(let i=0; i<50; i++){
+        const direction = Math.random()< 0.5 ? -2 :2
+        houses.push({
+            lat:position.lat + Math.random() / direction,
+            lng: position.lng + Math.random() / direction
+        });
+    }
+    return houses;
+};
+```
+---
+- This function is used to give directions/path towards a destination
+- It takes an argument house which is basically a coordinate ({lat,lng}).
+- inside fucntion `destination` is basically also a coordinate {lat,lng}. it is to where the path should be drawn meaning destination.
+```js
+const fetchDirections =(house)=>{ 
+        if(!office) return ;
+        
+        const service = new window.google.maps.DirectionsService();
+        service.route({
+            origin:house,
+            destination:office,
+            travelMode:window.google.maps.TravelMode.DRIVING
+        },(result, status)=>{
+            if(status === 'OK' && result){
+                setDirections(result);
+            }
+        })
+    }
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+See `Places.jsx` for google search a location or google maps search suggestions.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## License
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+[MIT](https://choosealicense.com/licenses/mit/)
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
